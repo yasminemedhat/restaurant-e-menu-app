@@ -13,7 +13,7 @@
         <h3>{{ dish.name | uppercase }}</h3>
       </mat-card-title>
     </mat-card-header>
-    <img mat-card-image height="420px" src="{{ dish.image }}" alt="{{ dish.name }}" />
+    <img mat-card-image height="400px" src="{{ dish.image }}" alt="{{ dish.name }}" />
     <mat-card-content>
       <p>{{ dish.description }}</p>
     </mat-card-content>
@@ -35,4 +35,22 @@
       <p>{{ promotion.description }}</p>
     </mat-card-content>
   </mat-card>
+
+  <mat-card *ngIf="leader" fxFlex>
+    <mat-card-header>
+      <div mat-card-avatar></div>
+      <mat-card-title>
+        <h3>{{ leader.name | uppercase }}</h3>
+      </mat-card-title>
+    </mat-card-header>
+    <img
+      mat-card-image height="400px"
+      src="{{ leader.image }}"
+      alt="{{ leader.name }}"
+    />
+    <mat-card-content>
+      <p>{{ leader.description }}</p>
+    </mat-card-content>
+  </mat-card>
+
 </div>
