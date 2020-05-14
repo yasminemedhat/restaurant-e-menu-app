@@ -18,6 +18,9 @@ import {MatSliderModule} from '@angular/material/slider';
 
 import { FormsModule } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
+import { baseURL } from "./shared/baseurl";
+import { ProcessHTTPMsgService} from "./services/process-httpmsg.service"
 
 import { HeaderComponent } from "./header/header.component";
 import { FooterComponent } from "./footer/footer.component";
@@ -52,6 +55,7 @@ import { LoginComponent } from "./login/login.component";
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     FlexLayoutModule,
@@ -72,7 +76,11 @@ import { LoginComponent } from "./login/login.component";
   ],
   // entry components allow us to use components as an overlay on top of the current screen
   entryComponents: [LoginComponent],
-  providers: [DishService, PromotionService, LeaderService],
+  providers: [
+    DishService, PromotionService, LeaderService,
+    { provide: 'BaseURL', useValue: baseURL},
+    ProcessHTTPMsgService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

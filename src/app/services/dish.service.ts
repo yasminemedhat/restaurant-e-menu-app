@@ -1,33 +1,36 @@
 import { Injectable } from "@angular/core"; //make our service ingectible for dependency injection
 import { Dish } from "../shared/dish";
-import { DISHES } from "../shared/dishes";
 import { of, Observable } from 'rxjs';
-import { delay } from 'rxjs/operators'
+import { delay } from 'rxjs/operators';
+import {HttpClient} from "@angular/common/http";
+import { baseURL } from "../shared/baseurl";
+import { map, catchError } from "rxjs/operators";
+import { ProcessHTTPMsgService } from './process-httpmsg.service';
 
 @Injectable({
   providedIn: "root",
 })
 export class DishService {
-  constructor() {}
+  constructor(private http: HttpClient,
+    private processHTTPMsgService: ProcessHTTPMsgService) { }
 
   getDishes(): Observable<Dish[]> {
-    // Simulate server latency
-    // of will return an observable that will emit anything in a single emission then we convert it into a Observable
-    //  to mimic an HTTP request as HTTP return observables
-    return of(DISHES).pipe(delay(2000));
+    return this.http.get<Dish[]>(baseURL + 'dishes')
+      .pipe(catchError(this.processHTTPMsgService.handleError));
   }
 
-  getDish(id: string): Observable<Dish> {
-    // Simulate server latency
-    return of(DISHES.filter((dish) => dish.id === id)[0]).pipe(delay(2000));
+  getDish(id: number): Observable<Dish> {
+    return this.http.get<Dish>(baseURL + 'dishes/' + id)
+      .pipe(catchError(this.processHTTPMsgService.handleError));
   }
 
   getFeaturedDish(): Observable<Dish> {
-    // Simulate server latency
-    return of(DISHES.filter((dish) => dish.featured)[0]).pipe(delay(2000));
+    return this.http.get<Dish[]>(baseURL + 'dishes?featured=true').pipe(map(dishes => dishes[0]))
+      .pipe(catchError(this.processHTTPMsgService.handleError));
   }
 
-  getDisgesIds(): Observable<string []>{
-    return of(DISHES.map(dish=> dish.id));
+  getDishIds(): Observable<number[] | any> {
+    return this.getDishes().pipe(map(dishes => dishes.map(dish => dish.id)))
+      .pipe(catchError(error => error));
   }
 }

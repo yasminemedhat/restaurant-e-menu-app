@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { Params, ActivatedRoute } from "@angular/router"; //to extract params from the url, activated route to have access to the current route
 import { Location } from "@angular/common"; //to have the ability to go back and forward, it is a service
 import { FormBuilder, FormGroup, Validators, NgForm } from "@angular/forms";
@@ -21,6 +21,7 @@ export class DishdetailComponent implements OnInit {
   next: string;
   commentForm: FormGroup;
   comment: Comment;
+  errMess: string;
   
   formErrors = {
     author: "",
@@ -46,19 +47,21 @@ export class DishdetailComponent implements OnInit {
     private dishService: DishService,
     private location: Location,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    @Inject('BaseURL') private BaseURL
   ) {
     this.createForm();
   }
 
   ngOnInit() {
-    this.dishService.getDisgesIds().subscribe((dishIds) => this.dishIds = dishIds);
+    this.dishService.getDishIds().subscribe((dishIds) => this.dishIds = dishIds);
     //take one observable (params) and map it to another observable (dish service get dish)
     // that way users can modify the params to switch between dishes
     this.route.params.pipe(switchMap((params : Params) => this.dishService.getDish(params['id'])))
       .subscribe((dish) => {
         this.dish = dish;
-        this.setPrevNext(dish.id)
+        this.setPrevNext(dish.id),
+        errmess => this.errMess = <any>errmess
       });
   }
 
