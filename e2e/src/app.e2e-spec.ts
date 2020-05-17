@@ -8,10 +8,29 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getTitleText()).toEqual('conFusion app is running!');
+  it('should display message saying Restaurant Con fusion', () => {
+    page.navigateTo('/');
+    expect(page.getTitleText('app-root h1')).toEqual('Restaurant Con Fusion');
   });
+
+  it('should navigate to about us page ', () => {
+    page.navigateTo('/');
+    const navLink = page.getAllElements('a').get(1);
+    navLink.click();
+    expect(page.getParagraphText('h3')).toBe('About Us')
+  })
+
+  it('should enter a new comment to the dish', () => {
+    page.navigateTo('/dishdetail/0');
+    const author = page.getElement("input[type=text]");
+    author.sendKeys('Test author');
+    const comment = page.getElement("textarea");
+    comment.sendKeys('Test Comment');
+    const submitbutton = page.getElement('button[type=submit]');
+    submitbutton.click();
+
+    browser.pause();
+  })
 
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
