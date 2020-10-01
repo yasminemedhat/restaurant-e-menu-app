@@ -3,7 +3,9 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.23.
 
 ## Development server
-
+Step 1: you need to install nodejs and angular in your local system - Refer website - `https://nodejs.org/en/`
+Step 2: After Download run this command - `npm install`
+and after run above two command you can run below command
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
